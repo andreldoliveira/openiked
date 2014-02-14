@@ -172,7 +172,7 @@ ikev2_dispatch_ikev1(int fd, struct privsep_proc *p, struct imsg *imsg)
 			return (0);
 		}
 
-		log_debug("%s: message length %d", __func__, len);
+		log_debug("%s: message length %zd", __func__, len);
 
 		ikev2_recv(env, &msg);
 		ikev2_msg_cleanup(env, &msg);
@@ -276,7 +276,7 @@ ikev2_dispatch_cert(int fd, struct privsep_proc *p, struct imsg *imsg)
 			break;
 		}
 
-		log_debug("%s: AUTH type %d len %d", __func__, type, len);
+		log_debug("%s: AUTH type %d len %zd", __func__, type, len);
 
 		id = &sa->sa_localauth;
 		id->id_type = type;
@@ -322,7 +322,7 @@ ikev2_getimsgdata(struct iked *env, struct imsg *imsg, struct iked_sahdr *sh,
 	sa = sa_lookup(env, sh->sh_ispi, sh->sh_rspi, sh->sh_initiator);
 
 	log_debug("%s: imsg %d rspi %s ispi %s initiator %d sa %s"
-	    " type %d data length %d",
+	    " type %d data length %zd",
 	    __func__, imsg->hdr.type,
 	    print_spi(sh->sh_rspi, 8),
 	    print_spi(sh->sh_ispi, 8),
@@ -1070,7 +1070,7 @@ ikev2_policy2id(struct iked_static_id *polid, struct iked_id *id, int srcid)
 	if (ikev2_print_id(id, idstr, sizeof(idstr)) == -1)
 		return (-1);
 
-	log_debug("%s: %s %s length %d", __func__,
+	log_debug("%s: %s %s length %zd", __func__,
 	    srcid ? "srcid" : "dstid",
 	    idstr, ibuf_size(id->id_buf));
 
@@ -1274,7 +1274,7 @@ ikev2_next_payload(struct ikev2_payload *pld, size_t length,
 		return (-1);
 	}
 
-	log_debug("%s: length %d nextpayload %s",
+	log_debug("%s: length %zd nextpayload %s",
 	    __func__, pldlength, print_map(nextpayload, ikev2_payload_map));
 
 	pld->pld_length = htobe16(pldlength);
@@ -1561,7 +1561,7 @@ ikev2_add_proposals(struct iked *env, struct iked_sa *sa, struct ibuf *buf,
 		length += saplength;
 	}
 
-	log_debug("%s: length %d", __func__, length);
+	log_debug("%s: length %zd", __func__, length);
 
 	return (length);
 }
@@ -3157,7 +3157,7 @@ ikev2_sa_keys(struct iked *env, struct iked_sa *sa, struct ibuf *key)
 	if (dh_create_shared(group, dhsecret->buf,
 	    sa->sa_dhpeer->buf) == -1) {
 		log_debug("%s: failed to get dh secret"
-		    " group %d len %d secret %d exchange %d", __func__,
+		    " group %d len %d secret %zd exchange %zd", __func__,
 		    group->id, dh_getlen(group), ibuf_length(dhsecret),
 		    ibuf_length(sa->sa_dhpeer));
 		goto done;
@@ -3201,7 +3201,7 @@ ikev2_sa_keys(struct iked *env, struct iked_sa *sa, struct ibuf *key)
 	hash_update(prf, dhsecret->buf, ibuf_length(dhsecret));
 	hash_final(prf, skeyseed->buf, &tmplen);
 
-	log_debug("%s: SKEYSEED with %d bytes", __func__, tmplen);
+	log_debug("%s: SKEYSEED with %zd bytes", __func__, tmplen);
 	print_hex(skeyseed->buf, 0, tmplen);
 
 	if (ibuf_setsize(skeyseed, tmplen) == -1) {
@@ -3229,7 +3229,7 @@ ikev2_sa_keys(struct iked *env, struct iked_sa *sa, struct ibuf *key)
 		goto done;
 	}
 
-	log_debug("%s: S with %d bytes", __func__, ibuf_length(s));
+	log_debug("%s: S with %zd bytes", __func__, ibuf_length(s));
 	print_hex(s->buf, 0, ibuf_length(s));
 
 	/*
@@ -3261,25 +3261,25 @@ ikev2_sa_keys(struct iked *env, struct iked_sa *sa, struct ibuf *key)
 		goto done;
 	}
 
-	log_debug("%s: SK_d with %d bytes", __func__,
+	log_debug("%s: SK_d with %zd bytes", __func__,
 	    ibuf_length(sa->sa_key_d));
 	print_hex(sa->sa_key_d->buf, 0, ibuf_length(sa->sa_key_d));
-	log_debug("%s: SK_ai with %d bytes", __func__,
+	log_debug("%s: SK_ai with %zd bytes", __func__,
 	    ibuf_length(sa->sa_key_iauth));
 	print_hex(sa->sa_key_iauth->buf, 0, ibuf_length(sa->sa_key_iauth));
-	log_debug("%s: SK_ar with %d bytes", __func__,
+	log_debug("%s: SK_ar with %zd bytes", __func__,
 	    ibuf_length(sa->sa_key_rauth));
 	print_hex(sa->sa_key_rauth->buf, 0, ibuf_length(sa->sa_key_rauth));
-	log_debug("%s: SK_ei with %d bytes", __func__,
+	log_debug("%s: SK_ei with %zd bytes", __func__,
 	    ibuf_length(sa->sa_key_iencr));
 	print_hex(sa->sa_key_iencr->buf, 0, ibuf_length(sa->sa_key_iencr));
-	log_debug("%s: SK_er with %d bytes", __func__,
+	log_debug("%s: SK_er with %zd bytes", __func__,
 	    ibuf_length(sa->sa_key_rencr));
 	print_hex(sa->sa_key_rencr->buf, 0, ibuf_length(sa->sa_key_rencr));
-	log_debug("%s: SK_pi with %d bytes", __func__,
+	log_debug("%s: SK_pi with %zd bytes", __func__,
 	    ibuf_length(sa->sa_key_iprf));
 	print_hex(sa->sa_key_iprf->buf, 0, ibuf_length(sa->sa_key_iprf));
-	log_debug("%s: SK_pr with %d bytes", __func__,
+	log_debug("%s: SK_pr with %zd bytes", __func__,
 	    ibuf_length(sa->sa_key_rprf));
 	print_hex(sa->sa_key_rprf->buf, 0, ibuf_length(sa->sa_key_rprf));
 
@@ -3348,12 +3348,12 @@ ikev2_prfplus(struct iked_hash *prf, struct ibuf *key, struct ibuf *seed,
 		ibuf_release(t2);
 		ibuf_add(t, t1->buf, ibuf_length(t1));
 
-		log_debug("%s: T%d with %d bytes", __func__,
+		log_debug("%s: T%d with %zd bytes", __func__,
 		    pad, ibuf_length(t1));
 		print_hex(t1->buf, 0, ibuf_length(t1));
 	}
 
-	log_debug("%s: Tn with %d bytes", __func__, ibuf_length(t));
+	log_debug("%s: Tn with %zd bytes", __func__, ibuf_length(t));
 	print_hex(t->buf, 0, ibuf_length(t));
 
 	ibuf_release(t1);
@@ -3439,7 +3439,7 @@ ikev2_sa_tag(struct iked_sa *sa, struct iked_id *id)
 		}
 	}
 
-	log_debug("%s: %s (%d)", __func__, sa->sa_tag, strlen(sa->sa_tag));
+	log_debug("%s: %s (%zd)", __func__, sa->sa_tag, strlen(sa->sa_tag));
 
 	ret = 0;
  fail:
@@ -3508,7 +3508,7 @@ ikev2_childsa_negotiate(struct iked *env, struct iked_sa *sa, int initiator)
 	/* double key material length for inbound/outbound */
 	ilen *= 2;
 
-	log_debug("%s: key material length %d", __func__, ilen);
+	log_debug("%s: key material length %zd", __func__, ilen);
 
 	if ((seed = ibuf_dup(sa->sa_inonce)) == NULL ||
 	    ibuf_cat(seed, sa->sa_rnonce) != 0 ||

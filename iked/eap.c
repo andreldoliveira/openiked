@@ -79,11 +79,11 @@ eap_identity_response(struct eap_message *eap)
 	ptr += sizeof(*eap);
 
 	if (len == 0 || (str = get_string(ptr, len)) == NULL) {
-		log_info("%s: invalid identity response, length %d",
+		log_info("%s: invalid identity response, length %zd",
 		    __func__, len);
 		return (NULL);
 	}
-	log_debug("%s: identity '%s' length %d", __func__, str, len);
+	log_debug("%s: identity '%s' length %zd", __func__, str, len);
 	return (str);
 }
 
@@ -399,7 +399,7 @@ eap_parse(struct iked *env, struct iked_sa *sa, void *data, int response)
 				return (-1);
 			}
 			log_info("%s: %s %s id %d "
-			    "length %d valuesize %d name '%s' length %d",
+			    "length %d valuesize %d name '%s' length %zd",
 			    __func__,
 			    print_map(eap->eap_type, eap_type_map),
 			    print_map(ms->ms_opcode, eap_msopcode_map),
@@ -420,7 +420,7 @@ eap_parse(struct iked *env, struct iked_sa *sa, void *data, int response)
 				return (-1);
 			}
 			log_info("%s: %s %s id %d "
-			    "length %d valuesize %d name '%s' name-length %d",
+			    "length %d valuesize %d name '%s' name-length %zd",
 			    __func__,
 			    print_map(eap->eap_type, eap_type_map),
 			    print_map(ms->ms_opcode, eap_msopcode_map),
@@ -442,7 +442,7 @@ eap_parse(struct iked *env, struct iked_sa *sa, void *data, int response)
 					return (-1);
 				}
 				log_info("%s: %s %s request id %d "
-				    "length %d message '%s' message-len %d",
+				    "length %d message '%s' message-len %zd",
 				    __func__,
 				    print_map(eap->eap_type, eap_type_map),
 				    print_map(ms->ms_opcode, eap_msopcode_map),

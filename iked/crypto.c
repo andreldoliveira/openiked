@@ -328,7 +328,7 @@ cipher_setiv(struct iked_cipher *encr, void *iv, size_t len)
 	ibuf_release(encr->encr_iv);
 	if (iv != NULL) {
 		if (len < encr->encr_ivlength) {
-			log_debug("%s: invalid IV length %d", __func__, len);
+			log_debug("%s: invalid IV length %zd", __func__, len);
 			return (NULL);
 		}
 		encr->encr_iv = ibuf_new(iv, encr->encr_ivlength);

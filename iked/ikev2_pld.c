@@ -455,7 +455,7 @@ ikev2_pld_id(struct iked *env, struct ikev2_payload *pld,
 		return (-1);
 	}
 
-	log_debug("%s: id %s length %d", __func__, idstr, len);
+	log_debug("%s: id %s length %zd", __func__, idstr, len);
 
 	if (!ikev2_msg_frompeer(msg)) {
 		ibuf_release(idb.id_buf);
@@ -497,7 +497,7 @@ ikev2_pld_cert(struct iked *env, struct ikev2_payload *pld,
 	buf = msgbuf + offset;
 	len = betoh16(pld->pld_length) - sizeof(*pld) - sizeof(cert);
 
-	log_debug("%s: type %s length %d",
+	log_debug("%s: type %s length %zd",
 	    __func__, print_map(cert.cert_type, ikev2_cert_map), len);
 
 	print_hex(buf, 0, len);
@@ -581,7 +581,7 @@ ikev2_pld_auth(struct iked *env, struct ikev2_payload *pld,
 	buf = msgbuf + offset;
 	len = betoh16(pld->pld_length) - sizeof(*pld) - sizeof(auth);
 
-	log_debug("%s: method %s length %d",
+	log_debug("%s: method %s length %zd",
 	    __func__, print_map(auth.auth_method, ikev2_auth_map), len);
 
 	print_hex(buf, 0, len);
@@ -899,7 +899,7 @@ ikev2_pld_delete(struct iked *env, struct ikev2_payload *pld,
 			}
 		}
 
-		log_warnx("%s: deleted %d spis", __func__, found);
+		log_warnx("%s: deleted %zd spis", __func__, found);
 	}
 
 	if (found) {
@@ -936,7 +936,7 @@ ikev2_pld_ts(struct iked *env, struct ikev2_payload *pld,
 
 	len = betoh16(pld->pld_length) - sizeof(*pld) - sizeof(tsp);
 
-	log_debug("%s: count %d length %d", __func__,
+	log_debug("%s: count %d length %zd", __func__,
 	    tsp.tsp_count, len);
 
 	for (i = 0; i < tsp.tsp_count; i++) {
@@ -1059,7 +1059,7 @@ ikev2_pld_cp(struct iked *env, struct ikev2_payload *pld,
 	buf = msgbuf + offset;
 	len = betoh16(pld->pld_length) - sizeof(*pld) - sizeof(cp);
 
-	log_debug("%s: type %s length %d",
+	log_debug("%s: type %s length %zd",
 	    __func__, print_map(cp.cp_type, ikev2_cp_map), len);
 	print_hex(buf, 0, len);
 

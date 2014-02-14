@@ -303,7 +303,7 @@ ca_setauth(struct iked *env, struct iked_sa *sa,
 	else {
 		iov[2].iov_base = ibuf_data(authmsg);
 		iov[2].iov_len = ibuf_size(authmsg);
-		log_debug("%s: auth length %d", __func__, ibuf_size(authmsg));
+		log_debug("%s: auth length %zd", __func__, ibuf_size(authmsg));
 	}
 
 	if (proc_composev_imsg(env, id, IMSG_AUTH, -1, iov, iovcnt) == -1)
@@ -591,7 +591,7 @@ ca_reload(struct iked *env)
 		iov[1].iov_base = ibuf_data(env->sc_certreq);
 		iov[1].iov_len = ibuf_length(env->sc_certreq);
 
-		log_debug("%s: loaded %d ca certificate%s", __func__,
+		log_debug("%s: loaded %zd ca certificate%s", __func__,
 		    ibuf_length(env->sc_certreq) / SHA_DIGEST_LENGTH,
 		    ibuf_length(env->sc_certreq) == SHA_DIGEST_LENGTH ?
 		    "" : "s");
