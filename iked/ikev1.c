@@ -108,7 +108,7 @@ ikev1_dispatch_ikev2(int fd, struct privsep_proc *p, struct imsg *imsg)
 			return (0);
 		}
 
-		log_debug("%s: message length %d", __func__, len);
+		log_debug("%s: message length %zd", __func__, len);
 
 		ikev1_recv(env, &msg);
 		ikev2_msg_cleanup(env, &msg);
